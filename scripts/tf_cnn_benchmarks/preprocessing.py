@@ -78,8 +78,8 @@ def parse_example_proto(example_serialized):
                                   default_value=''),
     'class/label': tf.FixedLenFeature([], dtype=tf.int64,
                                       default_value=-1),
-    'class/text': tf.FixedLenFeature([], dtype=tf.string,
-                                     default_value=''),
+    # 'class/text': tf.FixedLenFeature([], dtype=tf.string,
+    #                                  default_value=''),
   }
   # sparse_float32 = tf.VarLenFeature(dtype=tf.float32)
   # # Sparse features in Example proto.
