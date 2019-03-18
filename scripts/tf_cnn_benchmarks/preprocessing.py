@@ -74,28 +74,28 @@ def parse_example_proto(example_serialized):
   """
   # Dense features in Example proto.
   feature_map = {
-      'image/encoded': tf.FixedLenFeature([], dtype=tf.string,
-                                          default_value=''),
-      'image/class/label': tf.FixedLenFeature([1], dtype=tf.int64,
-                                              default_value=-1),
-      'image/class/text': tf.FixedLenFeature([], dtype=tf.string,
-                                             default_value=''),
+    'encoded': tf.FixedLenFeature([], dtype=tf.string,
+                                  default_value=''),
+    'class/label': tf.FixedLenFeature([], dtype=tf.int64,
+                                      default_value=-1),
+    'class/text': tf.FixedLenFeature([], dtype=tf.string,
+                                     default_value=''),
   }
-  sparse_float32 = tf.VarLenFeature(dtype=tf.float32)
-  # Sparse features in Example proto.
-  feature_map.update(
-      {k: sparse_float32 for k in ['image/object/bbox/xmin',
-                                   'image/object/bbox/ymin',
-                                   'image/object/bbox/xmax',
-                                   'image/object/bbox/ymax']})
+  # sparse_float32 = tf.VarLenFeature(dtype=tf.float32)
+  # # Sparse features in Example proto.
+  # feature_map.update(
+  #     {k: sparse_float32 for k in ['image/object/bbox/xmin',
+  #                                  'image/object/bbox/ymin',
+  #                                  'image/object/bbox/xmax',
+  #                                  'image/object/bbox/ymax']})
 
   features = tf.parse_single_example(example_serialized, feature_map)
-  label = tf.cast(features['image/class/label'], dtype=tf.int32)
+  label = tf.cast(features['class/label'], dtype=tf.int32)
 
-  xmin = tf.expand_dims(features['image/object/bbox/xmin'].values, 0)
-  ymin = tf.expand_dims(features['image/object/bbox/ymin'].values, 0)
-  xmax = tf.expand_dims(features['image/object/bbox/xmax'].values, 0)
-  ymax = tf.expand_dims(features['image/object/bbox/ymax'].values, 0)
+  xmin = tf.expand_dims(tf.constant([0.1]), 0)
+  ymin = tf.expand_dims(tf.constant([0.1]), 0)
+  xmax = tf.expand_dims(tf.constant([0.9]), 0)
+  ymax = tf.expand_dims(tf.constant([0.9]), 0)
 
   # Note that we impose an ordering of (y, x) just to make life difficult.
   bbox = tf.concat([ymin, xmin, ymax, xmax], 0)
@@ -105,8 +105,7 @@ def parse_example_proto(example_serialized):
   bbox = tf.expand_dims(bbox, 0)
   bbox = tf.transpose(bbox, [0, 2, 1])
 
-  return features['image/encoded'], label, bbox, features['image/class/text']
-
+  return features['encoded'], label, bbox
 
 _RESIZE_METHOD_MAP = {
     'nearest': tf.image.ResizeMethod.NEAREST_NEIGHBOR,
@@ -636,7 +635,7 @@ class BaseImagePreprocessor(InputPreprocessor):
 
   def parse_and_preprocess(self, value, batch_position):
     assert self.supports_datasets()
-    image_buffer, label_index, bbox, _ = parse_example_proto(value)
+    image_buffer, label_index, bbox = parse_example_proto(value)
     image = self.preprocess(image_buffer, bbox, batch_position)
     return (image, label_index)
 
