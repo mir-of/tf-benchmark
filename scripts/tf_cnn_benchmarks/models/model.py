@@ -20,6 +20,8 @@ import tensorflow as tf
 
 import convnet_builder
 
+import debug
+
 # BuildNetworkResult encapsulate the result (e.g. logits) of a
 # Model.build_network() call.
 BuildNetworkResult = namedtuple(
@@ -267,6 +269,7 @@ class CNNModel(Model):
       logits = (
           network.affine(nclass, activation='linear', name='fc_final')
           if not self.skip_final_affine_layer() else network.top_layer)
+      logits = debug.add_prob(logits, name='fc_final')
       aux_logits = None
       if network.aux_top_layer is not None:
         with network.switch_to_aux_top_layer():
