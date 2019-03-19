@@ -36,32 +36,45 @@ class AlexnetModel(model.CNNModel):
     # Note: VALID requires padding the images by 3 in width and height
     input = cnn.conv(64, 11, 11, 4, 4, 'VALID', name='conv1')
     input = debug.add_prob(input, name='conv1')
+    print("conv1 shape: {}".format(input.get_shape()))
+
     input = cnn.mpool(3, 3, 2, 2, input_layer=input)
     input = debug.add_prob(input, name='conv1_pool')
+    print("conv1_pool shape: {}".format(input.get_shape()))
 
     input = cnn.conv(192, 5, 5, input_layer=input, name='conv2')
     input = debug.add_prob(input, name='conv2')
+    print("conv2 shape: {}".format(input.get_shape()))
+
     input = cnn.mpool(3, 3, 2, 2, input_layer=input)
     input = debug.add_prob(input, name='conv2_pool')
+    print("conv2_pool shape: {}".format(input.get_shape()))
 
     input = cnn.conv(384, 3, 3, input_layer=input, name='conv3')
     input = debug.add_prob(input, name='conv3')
+    print("conv3 shape: {}".format(input.get_shape()))
 
     input = cnn.conv(384, 3, 3, input_layer=input, name='conv4')
     input = debug.add_prob(input, name='conv4')
+    print("conv4 shape: {}".format(input.get_shape()))
 
     input = cnn.conv(256, 3, 3, input_layer=input, name='conv5')
     input = debug.add_prob(input, name='conv5')
+    print("conv5 shape: {}".format(input.get_shape()))
+
     input = cnn.mpool(3, 3, 2, 2, input_layer=input)
     input = debug.add_prob(input, name='conv5_pool')
+    print("conv5_pool shape: {}".format(input.get_shape()))
 
     input = cnn.reshape([-1, 256 * 6 * 6], input_layer=input)
     input = cnn.affine(4096, input_layer=input, name='fc1')
     input = debug.add_prob(input, name='fc1')
+    print("fc1 shape: {}".format(input.get_shape()))
     # input = cnn.dropout()
 
     input = cnn.affine(4096, input_layer=input, name='fc2')
     input = debug.add_prob(input, name='fc2')
+    print("fc2 shape: {}".format(input.get_shape()))
     # input = cnn.dropout()
 
 

@@ -255,8 +255,14 @@ class CNNModel(Model):
         information.
     """
     images = inputs[0]
+    images = debug.add_prob(images, name='input_image')
+    print("input_image shape: {}".format(images.get_shape()))
+
     if self.data_format == 'NCHW':
       images = tf.transpose(images, [0, 3, 1, 2])
+      images = debug.add_prob(images, name='input_image_nchw')
+      print("input_image_nchw shape: {}".format(images.get_shape()))
+
     var_type = tf.float32
     if self.data_type == tf.float16 and self.fp16_vars:
       var_type = tf.float16
@@ -270,6 +276,8 @@ class CNNModel(Model):
           network.affine(nclass, activation='linear', name='fc_final')
           if not self.skip_final_affine_layer() else network.top_layer)
       logits = debug.add_prob(logits, name='fc_final')
+      print("fc_final shape: {}".format(logits.get_shape()))
+
       aux_logits = None
       if network.aux_top_layer is not None:
         with network.switch_to_aux_top_layer():
