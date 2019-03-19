@@ -265,7 +265,7 @@ class CNNModel(Model):
       self.add_inference(network)
       # Add the final fully-connected class layer
       logits = (
-          network.affine(nclass, activation='linear')
+          network.affine(nclass, activation='linear', name='fc_final')
           if not self.skip_final_affine_layer() else network.top_layer)
       aux_logits = None
       if network.aux_top_layer is not None:

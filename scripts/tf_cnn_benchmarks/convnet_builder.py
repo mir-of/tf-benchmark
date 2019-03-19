@@ -153,7 +153,8 @@ class ConvNetBuilder(object):
            stddev=None,
            activation='relu',
            bias=0.0,
-           kernel_initializer=None):
+           kernel_initializer=None,
+           name=None):
     """Construct a conv2d layer on top of cnn."""
     if input_layer is None:
       input_layer = self.top_layer
@@ -161,7 +162,8 @@ class ConvNetBuilder(object):
       num_channels_in = self.top_size
     if stddev is not None and kernel_initializer is None:
       kernel_initializer = tf.truncated_normal_initializer(stddev=stddev)
-    name = 'conv' + str(self.counts['conv'])
+    if name == None:
+      name = 'conv' + str(self.counts['conv'])
     self.counts['conv'] += 1
     with tf.variable_scope(name):
       strides = [1, d_height, d_width, 1]
@@ -298,12 +300,14 @@ class ConvNetBuilder(object):
              num_channels_in=None,
              bias=0.0,
              stddev=None,
-             activation='relu'):
+             activation='relu',
+             name=None):
     if input_layer is None:
       input_layer = self.top_layer
     if num_channels_in is None:
       num_channels_in = self.top_size
-    name = 'affine' + str(self.counts['affine'])
+    if name == None:
+      name = 'affine' + str(self.counts['affine'])
     self.counts['affine'] += 1
     with tf.variable_scope(name):
       init_factor = 2. if activation == 'relu' else 1.
