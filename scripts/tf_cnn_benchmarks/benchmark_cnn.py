@@ -813,12 +813,37 @@ def benchmark_one_step(sess,
     run_options = None
     run_metadata = None
   summary_str = None
+
+  # ------------------ #
+  # Get probe tensors
+  probe_list = []
+  all_ops = tf.get_default_graph().get_operations()
+
+  for op in all_ops:
+    tensors = op.outputs
+    for t in tensors:
+      if 'probe' in t.name:
+        # print(t.name)
+        probe_list.append(t)
+
+  probe_dict = {}
+  for p in probe_list:
+    probe_dict[str(p)] = p
+  # ------------------ #
+
+
   start_time = time.time()
   if summary_op is None:
-    results = sess.run(fetches, options=run_options, run_metadata=run_metadata)
+    results, probe_res = sess.run([fetches, probe_dict], options=run_options, run_metadata=run_metadata)
   else:
-    (results, summary_str) = sess.run(
-        [fetches, summary_op], options=run_options, run_metadata=run_metadata)
+    (results, summary_str, probe_res) = sess.run(
+        [fetches, summary_op, probe_dict], options=run_options, run_metadata=run_metadata)
+
+  # ------------------ #
+  # hook probe
+  import debug
+  debug.add_prob(probe_res, 'train_probe/step_{}'.format(step))
+  # ------------------ #
 
   if not params.forward_only:
     lossval = results['average_loss']
