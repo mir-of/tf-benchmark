@@ -832,7 +832,7 @@ def benchmark_one_step(sess,
       (step == 0 or (step + 1) % params.display_every == 0)):
     speed_mean, speed_uncertainty, speed_jitter = get_perf_timing(
         batch_size, step_train_times)
-    log_str = '%i\t%s\t%.*f' % (
+    log_str = '%i\t%s\t loss: %.*f' % (
         step + 1,
         get_perf_timing_str(speed_mean, speed_uncertainty, speed_jitter),
         LOSS_AND_ACCURACY_DIGITS_TO_SHOW, lossval)
