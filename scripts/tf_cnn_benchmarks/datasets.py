@@ -31,8 +31,8 @@ import tensorflow as tf
 from tensorflow.python.platform import gfile
 import preprocessing
 
-IMAGENET_NUM_TRAIN_IMAGES = 1281167
-IMAGENET_NUM_VAL_IMAGES = 50000
+IMAGENET_NUM_TRAIN_IMAGES = 1
+IMAGENET_NUM_VAL_IMAGES = 1
 
 COCO_NUM_TRAIN_IMAGES = 118287
 COCO_NUM_VAL_IMAGES = 4952
