@@ -604,6 +604,8 @@ flags.DEFINE_integer('max_ckpts_to_keep', 5,
 flags.DEFINE_string('train_dir', None,
                     'Path to session checkpoints. Pass None to disable saving '
                     'checkpoint at the end.')
+flags.DEFINE_string('pretrained_model_for_eval', None,
+                    'Path to session checkpoints for evaluation')
 flags.DEFINE_string('eval_dir', '/tmp/tf_cnn_benchmarks/eval',
                     'Directory where to write eval event logs.')
 flags.DEFINE_string('backbone_model_path', None,
@@ -1813,10 +1815,10 @@ class BenchmarkCNN(object):
       dictionary.
 
     Raises:
-      ValueError: If self.params.train_dir is unspecified.
+      ValueError: If self.params.pretrained_model_for_eval is unspecified.
     """
-    if self.params.train_dir is None:
-      raise ValueError('Trained model directory not specified')
+    if self.params.pretrained_model_for_eval is None:
+      raise ValueError('pretrained_model_for_eval directory not specified')
     graph_info = self._build_eval_graph()
     saver = tf.train.Saver(self.variable_mgr.savable_variables())
     summary_writer = tf.summary.FileWriter(self.params.eval_dir,
@@ -1828,12 +1830,12 @@ class BenchmarkCNN(object):
           target=target, config=create_config_proto(self.params)) as sess:
         image_producer = None
         try:
-          global_step = load_checkpoint(saver, sess, self.params.train_dir)
+          global_step = load_checkpoint(saver, sess, self.params.pretrained_model_for_eval)
           image_producer = self._initialize_eval_graph(
               graph_info.enqueue_ops, graph_info.input_producer_op,
               graph_info.local_var_init_op_group, sess)
         except CheckpointNotFoundException:
-          log_fn('Checkpoint not found in %s' % self.params.train_dir)
+          log_fn('Checkpoint not found in %s' % self.params.pretrained_model_for_eval)
         else:  # Only executes if an exception was not thrown
           self._eval_once(sess, summary_writer, graph_info.fetches,
                           graph_info.summary_op, image_producer, global_step)
