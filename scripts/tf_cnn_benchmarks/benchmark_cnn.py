@@ -825,7 +825,7 @@ def benchmark_one_step(sess,
     tensors = op.outputs
     for t in tensors:
       if 'probe' in t.name:
-        #print("name: {}, shape: {}".format(t.name, t.get_shape()))
+        print("name: {}, shape: {}".format(t.name, t.get_shape()))
         probe_list.append(t)
 
   # ------------------ #
@@ -842,7 +842,7 @@ def benchmark_one_step(sess,
   # hook probe
   import debug
   probe_tensor = zip(probe_list, probe_res)
-  debug.tensor_hook(probe_tensor, 'train_probe/step_{}'.format(step))
+  debug.tensor_hook(probe_tensor, 'train_probe/iter_{}'.format(step))
   # ------------------ #
 
   if not params.forward_only:
