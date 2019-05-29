@@ -38,7 +38,7 @@ class AlexnetModel(model.CNNModel):
     input = debug.add_prob(input, name='conv1')
     print("conv1 shape: {}".format(input.get_shape()))
 
-    input = cnn.mpool(3, 3, 2, 2, input_layer=input)
+    input = cnn.apool(3, 3, 2, 2, input_layer=input)
     input = debug.add_prob(input, name='conv1_pool')
     print("conv1_pool shape: {}".format(input.get_shape()))
 
@@ -46,7 +46,7 @@ class AlexnetModel(model.CNNModel):
     input = debug.add_prob(input, name='conv2')
     print("conv2 shape: {}".format(input.get_shape()))
 
-    input = cnn.mpool(3, 3, 2, 2, input_layer=input)
+    input = cnn.apool(3, 3, 2, 2, input_layer=input)
     input = debug.add_prob(input, name='conv2_pool')
     print("conv2_pool shape: {}".format(input.get_shape()))
 
@@ -62,7 +62,7 @@ class AlexnetModel(model.CNNModel):
     input = debug.add_prob(input, name='conv5')
     print("conv5 shape: {}".format(input.get_shape()))
 
-    input = cnn.mpool(3, 3, 2, 2, input_layer=input)
+    input = cnn.apool(3, 3, 2, 2, input_layer=input)
     input = debug.add_prob(input, name='conv5_pool')
     print("conv5_pool shape: {}".format(input.get_shape()))
 
@@ -94,11 +94,11 @@ class AlexnetCifar10Model(model.CNNModel):
 
   def add_inference(self, cnn):
     cnn.conv(64, 5, 5, 1, 1, 'SAME', stddev=5e-2)
-    cnn.mpool(3, 3, 2, 2, mode='SAME')
+    cnn.apool(3, 3, 2, 2, mode='SAME')
     cnn.lrn(depth_radius=4, bias=1.0, alpha=0.001 / 9.0, beta=0.75)
     cnn.conv(64, 5, 5, 1, 1, 'SAME', bias=0.1, stddev=5e-2)
     cnn.lrn(depth_radius=4, bias=1.0, alpha=0.001 / 9.0, beta=0.75)
-    cnn.mpool(3, 3, 2, 2, mode='SAME')
+    cnn.apool(3, 3, 2, 2, mode='SAME')
     shape = cnn.top_layer.get_shape().as_list()
     flat_dim = shape[1] * shape[2] * shape[3]
     cnn.reshape([-1, flat_dim])
