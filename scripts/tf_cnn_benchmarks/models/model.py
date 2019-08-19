@@ -302,6 +302,8 @@ class CNNModel(Model):
       cross_entropy = tf.losses.sparse_softmax_cross_entropy(
           logits=logits, labels=labels)
       loss = tf.reduce_mean(cross_entropy, name='xentropy_mean')
+      loss = debug.add_prob(loss, name='xentropy_mean_loss')
+      print("xentropy_mean_loss shape: {}".format(loss.get_shape()))
     if aux_logits is not None:
       with tf.name_scope('aux_xentropy'):
         aux_cross_entropy = tf.losses.sparse_softmax_cross_entropy(
