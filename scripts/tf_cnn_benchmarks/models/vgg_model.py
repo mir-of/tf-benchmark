@@ -26,30 +26,62 @@ References:
 from six.moves import xrange  # pylint: disable=redefined-builtin
 from models import model
 
+import debug
+
 
 def _construct_vgg(cnn, num_conv_layers):
   """Build vgg architecture from blocks."""
   assert len(num_conv_layers) == 5
   for _ in xrange(num_conv_layers[0]):
     cnn.conv(64, 3, 3)
-  cnn.mpool(2, 2)
+  
+  # cnn.mpool(2, 2)
+  input = cnn.mpool(2, 2)
+  input = debug.add_prob(input, name='pool1')
+  print("pool1 shape: {}".format(input.get_shape()))
+  
   for _ in xrange(num_conv_layers[1]):
     cnn.conv(128, 3, 3)
-  cnn.mpool(2, 2)
+  #cnn.mpool(2, 2)
+  input = cnn.mpool(2, 2)
+  input = debug.add_prob(input, name='pool2')
+  print("pool2 shape: {}".format(input.get_shape()))
+  
   for _ in xrange(num_conv_layers[2]):
     cnn.conv(256, 3, 3)
-  cnn.mpool(2, 2)
+  #cnn.mpool(2, 2)
+  input = cnn.mpool(2, 2)
+  input = debug.add_prob(input, name='pool3')
+  print("pool3 shape: {}".format(input.get_shape()))
+  
   for _ in xrange(num_conv_layers[3]):
     cnn.conv(512, 3, 3)
-  cnn.mpool(2, 2)
+  #cnn.mpool(2, 2)
+  input = cnn.mpool(2, 2)
+  input = debug.add_prob(input, name='pool4')
+  print("pool4 shape: {}".format(input.get_shape()))
+  
   for _ in xrange(num_conv_layers[4]):
     cnn.conv(512, 3, 3)
-  cnn.mpool(2, 2)
-  cnn.reshape([-1, 512 * 7 * 7])
-  cnn.affine(4096)
-  cnn.dropout()
-  cnn.affine(4096)
-  cnn.dropout()
+  #cnn.mpool(2, 2)
+  input = cnn.mpool(2, 2)
+  input = debug.add_prob(input, name='pool5')
+  print("pool5 shape: {}".format(input.get_shape()))
+
+  #cnn.reshape([-1, 512 * 7 * 7])
+  cnn.reshape([-1, 512 * 1 * 1])
+  #cnn.affine(4096)
+  input = cnn.affine(4096, name='fc1')
+  input = debug.add_prob(input, name='fc1')
+  print("fc1 shape: {}".format(input.get_shape()))
+
+  #cnn.dropout()
+  #cnn.affine(4096)
+  input = cnn.affine(4096, name='fc2')
+  input = debug.add_prob(input, name='fc2')
+  print("fc2 shape: {}".format(input.get_shape()))
+
+  #cnn.dropout()
 
 
 class Vgg11Model(model.CNNModel):

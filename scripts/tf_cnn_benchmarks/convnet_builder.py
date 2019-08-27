@@ -146,7 +146,7 @@ class ConvNetBuilder(object):
            k_width,
            d_height=1,
            d_width=1,
-           mode='SAME',
+           mode='VALID',
            input_layer=None,
            num_channels_in=None,
            use_batch_norm=None,
@@ -179,7 +179,7 @@ class ConvNetBuilder(object):
           conv = self._conv2d_impl(input_layer, num_channels_in,
                                    num_out_channels,
                                    kernel_size=[k_height, k_width],
-                                   strides=[d_height, d_width], padding='SAME',
+                                   strides=[d_height, d_width], padding='VALID',
                                    kernel_initializer=kernel_initializer)
         else:
           rate = 1  # Unused (for 'a trous' convolutions)
