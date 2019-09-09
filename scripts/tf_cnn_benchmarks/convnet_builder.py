@@ -152,7 +152,7 @@ class ConvNetBuilder(object):
            use_batch_norm=None,
            stddev=None,
            activation='relu',
-           bias=0.0,
+           bias=None,
            kernel_initializer=None,
            name=None):
     """Construct a conv2d layer on top of cnn."""

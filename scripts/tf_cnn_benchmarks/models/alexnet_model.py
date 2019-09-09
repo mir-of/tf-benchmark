@@ -38,7 +38,7 @@ class AlexnetModel(model.CNNModel):
     input = debug.add_prob(input, name='conv1')
     print("conv1 shape: {}".format(input.get_shape()))
 
-    input = cnn.mpool(3, 3, 2, 2, input_layer=input)
+    input = cnn.apool(3, 3, 2, 2, input_layer=input)
     input = debug.add_prob(input, name='conv1_pool')
     print("conv1_pool shape: {}".format(input.get_shape()))
 
@@ -46,7 +46,7 @@ class AlexnetModel(model.CNNModel):
     input = debug.add_prob(input, name='conv2')
     print("conv2 shape: {}".format(input.get_shape()))
 
-    input = cnn.mpool(3, 3, 2, 2, input_layer=input)
+    input = cnn.apool(3, 3, 2, 2, input_layer=input)
     input = debug.add_prob(input, name='conv2_pool')
     print("conv2_pool shape: {}".format(input.get_shape()))
 
@@ -62,7 +62,7 @@ class AlexnetModel(model.CNNModel):
     input = debug.add_prob(input, name='conv5')
     print("conv5 shape: {}".format(input.get_shape()))
 
-    input = cnn.mpool(3, 3, 2, 2, input_layer=input)
+    input = cnn.apool(3, 3, 2, 2, input_layer=input)
     input = debug.add_prob(input, name='conv5_pool')
     print("conv5_pool shape: {}".format(input.get_shape()))
 
