@@ -1,5 +1,19 @@
-# TensorFlow benchmarks
-This repository contains various TensorFlow benchmarks. Currently, it consists of two projects:
+# alexnet & vgg16 for test
 
-1. [scripts/tf_cnn_benchmarks](https://github.com/tensorflow/benchmarks/tree/master/scripts/tf_cnn_benchmarks): The TensorFlow CNN benchmarks contain benchmarks for several convolutional neural networks.
-2. [scripts/keras_benchmarks](https://github.com/tensorflow/benchmarks/tree/master/scripts/keras_benchmarks): The Keras benchmarks contain benchmarks for several models using Keras. Note this project is deprecated and unmaintained.
+This is modified version of tensorflow/benchmark:r1.12, and depend on tensorflow:1.12.
+
+
+## run alexnet
+```
+cd alexnet_test
+sh clear_and_set.sh
+sh run_test.sh
+```
+
+
+## run vgg16
+```
+cd vgg_test
+sh clear_and_set.sh
+sh run_test.sh
+```

@@ -152,7 +152,7 @@ class ConvNetBuilder(object):
            use_batch_norm=None,
            stddev=None,
            activation='relu',
-           bias=0.0,
+           bias=None,
            kernel_initializer=None,
            name=None):
     """Construct a conv2d layer on top of cnn."""
@@ -316,9 +316,10 @@ class ConvNetBuilder(object):
           'weights', [num_channels_in, num_out_channels],
           self.variable_dtype, self.dtype,
           initializer=tf.truncated_normal_initializer(stddev=stddev))
-      biases = self.get_variable('biases', [num_out_channels],
-                                 self.variable_dtype, self.dtype,
-                                 initializer=tf.constant_initializer(bias))
+      # biases = self.get_variable('biases', [num_out_channels],
+                                 # self.variable_dtype, self.dtype,
+                                 # initializer=tf.constant_initializer(bias))
+      biases = tf.constant(value=0.0, shape=[num_out_channels])
       logits = tf.nn.xw_plus_b(input_layer, kernel, biases)
       if activation == 'relu':
         affine1 = tf.nn.relu(logits, name=name)
