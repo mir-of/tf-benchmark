@@ -59,6 +59,7 @@ from tensorflow.python.ops import data_flow_ops
 from tensorflow.python.platform import gfile
 from tensorflow.python.util import nest
 
+import debug
 
 _DEFAULT_NUM_BATCHES = 100
 
@@ -840,7 +841,6 @@ def benchmark_one_step(sess,
 
   # ------------------ #
   # hook probe
-  import debug
   probe_tensor = zip(probe_list, probe_res)
   debug.tensor_hook(probe_tensor, 'train_probe/iter_{}'.format(step))
   # ------------------ #
@@ -3101,6 +3101,9 @@ class BenchmarkCNN(object):
         return [logits]
 
       base_loss = self.model.loss_function(input_list, build_network_result)
+      base_loss = debug.add_prob(base_loss, "loss")
+      print("loss shape: {}".format(base_loss.shape))
+
       params = self.variable_mgr.trainable_variables_on_device(
           rel_device_num, abs_device_num)
       l2_loss = None
