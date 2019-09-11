@@ -8,7 +8,7 @@ python ../scripts/tf_cnn_benchmarks/tf_cnn_benchmarks.py \
 --datasets_use_prefetch=False \
 --datasets_num_private_threads=1 \
 --batch_size=1 \
---num_batches=10 \
+--num_batches=20 \
 --display_every=1 \
 --save_model_steps=1 \
 --num_warmup_batches=0 \
